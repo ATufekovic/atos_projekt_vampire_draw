@@ -1,0 +1,39 @@
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <form name="myForm" ng-keypress="($event.charCode==13)? login() : return">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" value="" ng-model="username" required autocomplete="username">
+                            <span style="color:red" ng-show="myForm.username.$dirty && myForm.username.$invalid">
+                            <span ng-show="myForm.username.$error.required">Username is required.</span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" value="" ng-model="password" required autocomplete="current-password">
+                            <span style="color:red" ng-show="myForm.password.$dirty && myForm.password.$invalid">
+                            <span ng-show="myForm.password.$error.required">Password is required.</span>
+                            </span>
+                            <span style="color:red" ng-show="badLogin">
+                            <span ng-show="badLogin">Failed login due to wrong user credentials.</span>
+                            </span>
+                        </div>
+                        <button type="button" class="btn btn-primary" ng-click="login()" ng-disabled="myForm.username.$invalid
+                         || myForm.password.$invalid">Login</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    Not a user? <a href="#!register">Register here</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
