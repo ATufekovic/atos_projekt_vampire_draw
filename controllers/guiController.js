@@ -4,6 +4,7 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
 
     $scope.smartStrips = [];
     $scope.totalPowerDraw = 0;
+    $scope.isUpdating = false;
 
     $scope.testAddNewStrip = function() {
         if($scope.stripNameIsValid($scope.stripName)) $scope.stripNameWrongInput=false;
@@ -135,12 +136,19 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             return;
         }
         $scope.smartStrips = smartStripStorage.getSmartStrips();
-        //$timeout(function(){console.log(smartStripStorage.getSmartStrips());}, 1000);
         $timeout(function(){
-            console.log(smartStripStorage.getSmartStrips());
             smartStripStorage.calculatePowerDraw();
             $scope.totalPowerDraw = smartStripStorage.getTotalPowerDraw();
-        },200);
+
+            if(!$scope.isUpdating){//if not already updating, start doing so
+                $scope.isUpdating = true;
+                $interval(function(){
+                    smartStripStorage.calculatePowerDraw();
+                }, 3000);
+            }
+        },200);//more than 1s and it wont work???
+
+        
     }
 
     $scope.getSmartStripsByUserID = function() {
