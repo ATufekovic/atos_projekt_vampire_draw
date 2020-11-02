@@ -38,5 +38,13 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         }
     }
 
-    
+    this.calculatePowerDraw = function(){
+        this.smartStrips.forEach(strip => {
+            var totalDraw = 0;
+            strip.plugs.forEach(plug => {
+                totalDraw += plug.powerDraw;
+            });
+            strip.powerDraw = totalDraw;
+        });
+    }    
 });

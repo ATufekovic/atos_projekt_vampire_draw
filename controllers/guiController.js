@@ -1,4 +1,4 @@
-angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout) {
+angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout, $location) {
     $scope.$watch('stripName',function() {$scope.testAddNewStrip();});
     $scope.$watch('stripNumber',function() {$scope.testAddNewStrip();});
 
@@ -129,7 +129,16 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
     }
 
     $scope.init = function(){
+        if(usernameStorage.getID() == "default"){
+            $location.path("login");
+            return;
+        }
         $scope.smartStrips = smartStripStorage.getSmartStrips();
+        //$timeout(function(){console.log(smartStripStorage.getSmartStrips());}, 1000);
+        $timeout(function(){
+            console.log(smartStripStorage.getSmartStrips());
+            smartStripStorage.calculatePowerDraw();
+        },200);
     }
 
     $scope.getSmartStripsByUserID = function() {

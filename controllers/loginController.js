@@ -56,18 +56,20 @@ angular.module("smartStripApp").controller("loginCtrl", function($scope, usernam
         //console.log(response);
         smartStripStorage.setSmartStrips(response.data);
         var _temp = smartStripStorage.getSmartStrips();
+        var counter = 0;
         _temp.forEach(strip => {
-            getPlugsBySmartStripID(strip);
+            getPlugsBySmartStripID(strip, counter);
         });
         //console.log(_temp);
         $location.path("gui");
     }
 
+
     function _errorSmartStrip(response) {
         console.log(response);
     }
 
-    function getPlugsBySmartStripID(strip) {
+    function getPlugsBySmartStripID(strip, counter) {
         var method = "GET";
         var url = "http://localhost:1880/getPlugsBySmartStripID";
         var params={"id": strip.id};
@@ -79,6 +81,7 @@ angular.module("smartStripApp").controller("loginCtrl", function($scope, usernam
                 'Content-Type' : 'application/json'
             }
         }).then( function _successGetPlugsBySmartStripID(response) {
+            counter += 1;
             smartStripStorage.setPlugs(strip,response.data);
         },function _errorGetPlugsBySmartStripID(response){
             console.log(response);
