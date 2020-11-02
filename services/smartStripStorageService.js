@@ -1,5 +1,6 @@
 angular.module("smartStripApp").service("smartStripStorage", function(){
     this.smartStrips = [];
+    this.totalPowerDraw = 0;
 
     this.getSmartStrips = function() {
         //console.log(this.smartStrips);
@@ -18,6 +19,10 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         //console.log(smartStrip);
         smartStrip.plugs = JSON.parse(JSON.stringify(plugs));
         return;
+    }
+    
+    this.getTotalPowerDraw = function(){
+        return this.totalPowerDraw;
     }
 
     this.changeStripMasterState = function(smartStrip){
@@ -39,10 +44,12 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
     }
 
     this.calculatePowerDraw = function(){
+        this.totalPowerDraw = 0;
         this.smartStrips.forEach(strip => {
             var totalDraw = 0;
             strip.plugs.forEach(plug => {
                 totalDraw += plug.powerDraw;
+                this.totalPowerDraw += plug.powerDraw;
             });
             strip.powerDraw = totalDraw;
         });

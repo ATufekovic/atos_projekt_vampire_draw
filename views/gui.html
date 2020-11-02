@@ -26,6 +26,7 @@
 
         <div class="col-sm-4 container p-3 bg-light">
             <div class="d-flex flex-wrap flex-row bg-light align-content-around">
+                <p>Total power draw: {{totalPowerDraw}} W</p>
                 <div class="p-4 border container-fluid" ng-repeat="x in smartStrips" ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
                     <img src="smartStrip.svg" height="50" witdh="50">
                     <p class="text-center"><b>{{x.name}} = {{x.powerDraw}} W</b></p>

@@ -3,6 +3,7 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
     $scope.$watch('stripNumber',function() {$scope.testAddNewStrip();});
 
     $scope.smartStrips = [];
+    $scope.totalPowerDraw = 0;
 
     $scope.testAddNewStrip = function() {
         if($scope.stripNameIsValid($scope.stripName)) $scope.stripNameWrongInput=false;
@@ -138,6 +139,7 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
         $timeout(function(){
             console.log(smartStripStorage.getSmartStrips());
             smartStripStorage.calculatePowerDraw();
+            $scope.totalPowerDraw = smartStripStorage.getTotalPowerDraw();
         },200);
     }
 
