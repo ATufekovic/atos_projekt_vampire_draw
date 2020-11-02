@@ -56,8 +56,8 @@ angular.module("smartStripApp").controller("loginCtrl", function($scope, usernam
         //console.log(response);
         smartStripStorage.setSmartStrips(response.data);
         var _temp = smartStripStorage.getSmartStrips();
-        _temp.forEach(element => {
-            getPlugsBySmartStripID(element, element.id);
+        _temp.forEach(strip => {
+            getPlugsBySmartStripID(strip);
         });
         //console.log(_temp);
         $location.path("gui");
@@ -67,10 +67,10 @@ angular.module("smartStripApp").controller("loginCtrl", function($scope, usernam
         console.log(response);
     }
 
-    function getPlugsBySmartStripID(strip, id) {
+    function getPlugsBySmartStripID(strip) {
         var method = "GET";
         var url = "http://localhost:1880/getPlugsBySmartStripID";
-        var params={"id": id};
+        var params={"id": strip.id};
         $http({
             method : method,
             url : url,
@@ -83,18 +83,5 @@ angular.module("smartStripApp").controller("loginCtrl", function($scope, usernam
         },function _errorGetPlugsBySmartStripID(response){
             console.log(response);
         });
-    }
-
-    /* function _successGetPlugsBySmartStripID(response, strip) {
-        //console.log(response);
-        smartStripStorage.setPlugs(strip,response.data);
-        smartStripStorage.setBackgroundColorPlugs(strip);
-    }
-
-    function _errorGetPlugsBySmartStripID(response, strip) {
-        console.log(response);
-    } */
-
-
-    
+    }    
 });

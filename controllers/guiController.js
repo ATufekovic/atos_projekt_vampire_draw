@@ -1,17 +1,8 @@
-angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http) {
+angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout) {
     $scope.$watch('stripName',function() {$scope.testAddNewStrip();});
     $scope.$watch('stripNumber',function() {$scope.testAddNewStrip();});
 
     $scope.smartStrips = [];
-    
-    /* for(var i=0;i<$scope.smartStrips.length;i++){
-        if($scope.smartStrips[i].masterState==true) $scope.smartStrips[i].color="bg-success";
-        else $scope.smartStrips[i].color="bg-secondary";
-        for(var j=0;j<$scope.smartStrips[i].plugs.length;j++){
-            if($scope.smartStrips[i].plugs[j].state==true) $scope.smartStrips[i].plugs[j].color="bg-success";
-            else $scope.smartStrips[i].plugs[j].color="bg-secondary";
-        }
-    } */
 
     $scope.testAddNewStrip = function() {
         if($scope.stripNameIsValid($scope.stripName)) $scope.stripNameWrongInput=false;
@@ -50,35 +41,9 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
 
 
     $scope.addSmartStrip = function() {
-    var method = "POST";
-    var url = "http://localhost:1880/addSmartStrip";
-    var data={"ownerID":usernameStorage.getID(),"name": $scope.stripName, "numOfPlugs": $scope.stripNumber};
-    $http({
-        method : method,
-        url : url,
-        data : data,
-        headers : {
-            'Content-Type' : 'application/json'
-        }
-    }).then( _successaddSmartStrip, _erroraddSmartStrip);
-    }
-
-    function _successaddSmartStrip(response) {
-    $scope.stripName="";
-    $scope.stripNumber="";
-    }
-
-    function _erroraddSmartStrip(response) {
-        console.log(response.statusText);
-    }
-
-
-/*
-//TODO change to proper GET
-    function getStripStatus() {
-        var method = "GET";
-        var url = "http://localhost:1880/getStripStatus";
-        var data={"id": stripStorage.getID()};
+        var method = "POST";
+        var url = "http://localhost:1880/addSmartStrip";
+        var data={"ownerID":usernameStorage.getID(),"name": $scope.stripName, "numOfPlugs": $scope.stripNumber};
         $http({
             method : method,
             url : url,
@@ -86,24 +51,18 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).then( _success, _error );
+        }).then( $scope._successaddSmartStrip, $scope._erroraddSmartStrip);
     }
 
-    function getPlugStatus() {
-        var method = "GET";
-        var url = "http://localhost:1880/getPlugStatus";
-        var data={"id": plugStorage.getID()};
-        $http({
-            method : method,
-            url : url,
-            data : data,
-            headers : {
-                'Content-Type' : 'application/json'
-            }
-        }).then( _success, _error );
+    $scope._successaddSmartStrip = function(response) {
+        $scope.getSmartStripsByUserID();
+        $scope.stripName="";
+        $scope.stripNumber="";
     }
 
-    */
+    $scope._erroraddSmartStrip = function(response) {
+        console.log(response);
+    }
 
     $scope.switchMasterState = function(id) {
         var method = "POST";
@@ -116,15 +75,15 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).then( _successSwitchMasterState, _errorSwitchMasterState);
+        }).then( $scope._successSwitchMasterState, $scope._errorSwitchMasterState);
     }
 
-    function _successSwitchMasterState(response) {
+    $scope._successSwitchMasterState = function(response) {
         //console.log(response);
         smartStripStorage.changeStripMasterState(response.data[0]);
     }
 
-    function _errorSwitchMasterState(response) {
+    $scope._errorSwitchMasterState = function(response) {
         console.log(response);
     }
 
@@ -139,47 +98,16 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             headers : {
                 'Content-Type' : 'application/json'
             }
-        }).then( _successSwitchState, _errorSwitchMasterState);
+        }).then( $scope._successSwitchState, $scope._errorSwitchMasterState);
     }
 
-    function _successSwitchState(response) {
+    $scope._successSwitchState = function(response) {
         smartStripStorage.changePlugState(response.data[0]);
     }
 
-    function _errorSwitchMasterState(response) {
-        console.log(response.statusText);
+    $scope._errorSwitchMasterState = function(response) {
+        console.log(response);
     }
-/*
-        function switchIsPlugged() {
-            var method = "POST";
-            var url = "http://localhost:1880/switchIsPlugged";
-            var data={"id": plugID};
-            $http({
-                method : method,
-                url : url,
-                data : data,
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).then( _success, _error );
-    }
-
-        function switchIsPluggedActive() {
-            var method = "POST";
-            var url = "http://localhost:1880/switchIsPluggedActive";
-            var data={"id": plugID};
-            $http({
-                method : method,
-                url : url,
-                data : data,
-                headers : {
-                    'Content-Type' : 'application/json'
-                }
-            }).then( _success, _error );
-    }
-
-*/
-
 
     $scope.users = [
         { username: "test1", email: "email1@ma.il" },
@@ -202,6 +130,51 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
 
     $scope.init = function(){
         $scope.smartStrips = smartStripStorage.getSmartStrips();
+    }
+
+    $scope.getSmartStripsByUserID = function() {
+        var method = "GET";
+        var url = "http://localhost:1880/getSmartStripsByUserID";
+        var params={"id" : usernameStorage.getID()};
+        $http({
+            method : method,
+            url : url,
+            params : params,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then( $scope._successSmartStrip, $scope._errorSmartStrip);
+    }
+
+    $scope._successSmartStrip = function(response) {
+        smartStripStorage.setSmartStrips(response.data);
+        var _temp = smartStripStorage.getSmartStrips();
+        _temp.forEach(strip => {
+            $scope.getPlugsBySmartStripID(strip);
+        });
+        $timeout($scope.init(),2000);
+    }
+
+    $scope._errorSmartStrip = function(response) {
+        console.log(response);
+    }
+
+    $scope.getPlugsBySmartStripID = function(strip) {
+        var method = "GET";
+        var url = "http://localhost:1880/getPlugsBySmartStripID";
+        var params={"id": strip.id};
+        $http({
+            method : method,
+            url : url,
+            params : params,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then( function _successGetPlugsBySmartStripID(response) {
+            smartStripStorage.setPlugs(strip,response.data);
+        },function _errorGetPlugsBySmartStripID(response){
+            console.log(response);
+        });
     }
 });
 
