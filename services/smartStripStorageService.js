@@ -1,6 +1,6 @@
 angular.module("smartStripApp").service("smartStripStorage", function(){
     this.smartStrips = [];
-    this.totalPowerDraw = 0;
+    this.consumption = 0;
 
     this.getSmartStrips = function() {
         //console.log(this.smartStrips);
@@ -20,9 +20,10 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         smartStrip.plugs = JSON.parse(JSON.stringify(plugs));
         return;
     }
-    
-    this.getTotalPowerDraw = function(){
-        return this.totalPowerDraw;
+
+    this.setConsumption = function (smartStrip,consumption){
+        smartStrip.consumption = consumption;
+        return;
     }
 
     this.changeStripMasterState = function(smartStrip){
@@ -43,15 +44,18 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         }
     }
 
-    this.calculatePowerDraw = function(){
-        this.totalPowerDraw = 0;
-        this.smartStrips.forEach(strip => {
-            var totalDraw = 0;
-            strip.plugs.forEach(plug => {
-                totalDraw += plug.powerDraw;
-                this.totalPowerDraw += plug.powerDraw;
-            });
-            strip.powerDraw = totalDraw;
-        });
-    }    
+    this.smartstripConsumption = function(){
+        for(var i=0;i<this.smartStrips.length;i++){
+            this.smartStrips[i].consumption=0;
+            if(this.smartStrips[i].masterState==1){
+                for(var j=0;j<this.smartStrips[i].plugs.length;j++){
+                    if(this.smartStrips[i].plugs[j].state==1){
+                        this.smartStrips[i].consumption+=this.smartStrips[i].plugs[j].powerDraw;
+                    }
+                }   
+            }
+        }
+    }
+
+    
 });

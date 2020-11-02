@@ -26,10 +26,12 @@
 
         <div class="col-sm-4 container p-3 bg-light">
             <div class="d-flex flex-wrap flex-row bg-light align-content-around">
-                <p>Total power draw: {{totalPowerDraw}} W</p>
-                <div class="p-4 border container-fluid" ng-repeat="x in smartStrips" ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
+                <div class="p-4 border container-fluid container rounded" ng-repeat="x in smartStrips" ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
                     <img src="smartStrip.svg" height="50" witdh="50">
-                    <p class="text-center"><b>{{x.name}} = {{x.powerDraw}} W</b></p>
+                    <button type="button" class="close btn-lg" ng-click="deleteStrip(x)" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    <p class="text-center"><b>{{x.name}}</b></p>
                     <p></p>
                     <label class="switch">
                         <input type="checkbox" ng-model="x.masterState" ng-true-value="1" ng-false-value="0" ng-click="toggleSmartStrip(x)">
@@ -43,6 +45,11 @@
                                 <input type="checkbox" ng-model="y.state" ng-disabled="!x.masterState" ng-true-value="1" ng-false-value="0" ng-click="togglePlug(x,y)">
                                 <span class="slider round"></span>
                             </label>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap flex-row bg-light align-content-around">
+                        <div class="flex-grow p-2 border">
+                            <p class="text-center"><b>{{x.consumption}} W</b></p>
                         </div>
                     </div>
                 </div>

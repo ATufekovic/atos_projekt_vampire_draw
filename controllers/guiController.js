@@ -1,9 +1,10 @@
-angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout, $location) {
+angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout) {
     $scope.$watch('stripName',function() {$scope.testAddNewStrip();});
     $scope.$watch('stripNumber',function() {$scope.testAddNewStrip();});
 
     $scope.smartStrips = [];
-    $scope.totalPowerDraw = 0;
+    $scope.powerDrawConsumption;
+    
 
     $scope.testAddNewStrip = function() {
         if($scope.stripNameIsValid($scope.stripName)) $scope.stripNameWrongInput=false;
@@ -20,10 +21,21 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
         if(stripNumber>0 && stripNumber<20) return true;
         else return false;
     }
-    //smartStrips.forEach(element=>$scope.colors.push(element.state));
+    
+    window.setInterval(function(){
+        smartStripStorage.smartstripConsumption();
+        $scope.$apply();
+        console.log("asd");
+    }, 5000);
+
+    $scope.getSmartstripConsumption = function(){
+        smartStripStorage.smartstripConsumption();
+        console.log("asd");
+    }
 
     $scope.toggleSmartStrip = function(x){
-        //console.log(x);
+        //smartStripStorage.smartstripConsumption(x.id);
+        //console.log(x.id);
         $scope.switchMasterState(x.id);
         //$scope.$apply();
    }
@@ -37,7 +49,11 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
    }
 
    $scope.addStrip = function(){
-    $scope.addSmartStrip();
+        $scope.addSmartStrip();
+   }
+
+    $scope.deleteStrip = function(x){
+        $scope.deleteSmartStrip(x.id);
     }
 
 
@@ -62,6 +78,28 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
     }
 
     $scope._erroraddSmartStrip = function(response) {
+        console.log(response);
+    }
+
+    $scope.deleteSmartStrip = function(id) {
+        var method = "POST";
+        var url = "http://localhost:1880/deleteSmartStrip";
+        var data={"ownerID":usernameStorage.getID(),"id":id};
+        $http({
+            method : method,
+            url : url,
+            data : data,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then( $scope._successDeleteSmartStrip, $scope._errorDeleteSmartStrip);
+    }
+
+    $scope._successDeleteSmartStrip = function(response) {
+        $scope.getSmartStripsByUserID();
+    }
+
+    $scope._errorDeleteSmartStrip = function(response) {
         console.log(response);
     }
 
@@ -130,17 +168,7 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
     }
 
     $scope.init = function(){
-        if(usernameStorage.getID() == "default"){
-            $location.path("login");
-            return;
-        }
         $scope.smartStrips = smartStripStorage.getSmartStrips();
-        //$timeout(function(){console.log(smartStripStorage.getSmartStrips());}, 1000);
-        $timeout(function(){
-            console.log(smartStripStorage.getSmartStrips());
-            smartStripStorage.calculatePowerDraw();
-            $scope.totalPowerDraw = smartStripStorage.getTotalPowerDraw();
-        },200);
     }
 
     $scope.getSmartStripsByUserID = function() {
