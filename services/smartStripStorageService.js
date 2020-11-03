@@ -15,7 +15,7 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         return smartStrip.plugs;
     }
 
-    this.setPlugs = function(smartStrip,plugs){
+    this.setPlugs = function(smartStrip,plugs){//java works with references so this works
         //console.log(smartStrip);
         smartStrip.plugs = JSON.parse(JSON.stringify(plugs));
         return;
@@ -54,4 +54,31 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
             strip.powerDraw = totalDraw;
         });
     }    
+
+    this.refreshSmartStrips = function(newSmartStrips){
+        //similiar to other functions but wont change structure
+        this.smartStrips.forEach(currentStrip => {
+            newSmartStrips.forEach(newStrip => {
+                if(currentStrip.id == newStrip.id){
+                    //for strips only masterState matters
+                    currentStrip.masterState = newStrip.masterState;
+                }
+            });
+        });
+    }
+
+    this.refreshPlugs = function(newPlugs){
+        this.smartStrips.forEach(currentStrip => {
+            if(currentStrip.id == newPlugs[0].owner){//if the strip matches with the plug owner, it is that strip for all plugs
+                currentStrip.plugs.forEach(currentPlug => {
+                    newPlugs.forEach(newPlug => {
+                        if(currentPlug.id == newPlug.id){
+                            currentPlug.powerDraw = newPlug.powerDraw;
+                            currentPlug.state = newPlug.state;
+                        }
+                    })
+                })
+            }
+        })
+    }
 });

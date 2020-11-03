@@ -1,10 +1,12 @@
-angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout, $location) {
+angular.module("smartStripApp").controller("guiCtrl", function ($scope, usernameStorage, smartStripStorage, $http, $timeout, $location, $interval) {
     $scope.$watch('stripName',function() {$scope.testAddNewStrip();});
     $scope.$watch('stripNumber',function() {$scope.testAddNewStrip();});
 
     $scope.smartStrips = [];
     $scope.totalPowerDraw = 0;
-    $scope.isUpdating = false;
+
+    $scope.isUpdating = false;//once true, the update loop should probably not start again
+    $scope.hasStateChanged = false;
 
     $scope.testAddNewStrip = function() {
         if($scope.stripNameIsValid($scope.stripName)) $scope.stripNameWrongInput=false;
@@ -141,14 +143,67 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             $scope.totalPowerDraw = smartStripStorage.getTotalPowerDraw();
 
             if(!$scope.isUpdating){//if not already updating, start doing so
-                $scope.isUpdating = true;
+                $scope.isUpdating = true;//and only once
                 $interval(function(){
-                    smartStripStorage.calculatePowerDraw();
+                    console.log("Updating...");
+
+                    $scope.refreshSmartStrips();
+
+                    $timeout(function(){
+                        smartStripStorage.calculatePowerDraw();//total draw part
+                        $scope.totalPowerDraw = smartStripStorage.getTotalPowerDraw();
+                    }, 200);
                 }, 3000);
             }
         },200);//more than 1s and it wont work???
 
-        
+    }
+
+    $scope.refreshSmartStrips = function(){
+        var method = "GET";
+        var url = "http://127.0.0.1:1880/getSmartStripsByUserID";
+        var params = {"id" : usernameStorage.getID()};
+        var headers = {"Content-type" : "application/json"};
+        $http({
+            method : method,
+            url : url,
+            params : params,
+            headers : headers
+        }).then($scope._refreshSmartStripSuccess, $scope._refreshSmartStripError);
+    }
+
+    $scope._refreshSmartStripSuccess = function(response){
+        //alternative function that wont overwrite anything, just updates data around if possible
+        smartStripStorage.refreshSmartStrips(response.data);
+
+        response.data.forEach(strip => {
+            $scope.refreshPlugs(strip);
+        })
+    }
+
+    $scope._refreshSmartStripError = function(response){
+        console.log(response);
+    }
+
+    $scope.refreshPlugs = function(strip){
+        var method = "GET";
+        var url = "http://127.0.0.1:1880/getPlugsBySmartStripID";
+        var params = {"id" : strip.id};
+        var headers = {"Content-type" : "application/json"};
+        $http({
+            method : method,
+            url : url,
+            params : params,
+            headers : headers
+        }).then($scope._refreshPlugsSuccess, $scope._refreshPlugsError);
+    }
+
+    $scope._refreshPlugsSuccess = function(response){
+        smartStripStorage.refreshPlugs(response.data)
+    }
+
+    $scope._refreshPlugsError = function(response){
+        console.log(response);
     }
 
     $scope.getSmartStripsByUserID = function() {
