@@ -29,6 +29,9 @@
                 <p>Total power draw: {{totalPowerDraw}} W</p>
                 <div class="p-4 border container-fluid" ng-repeat="x in smartStrips" ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
                     <img src="smartStrip.svg" height="50" witdh="50">
+                    <button type="button" class="close btn-lg" ng-click="deleteStrip(x)" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <p class="text-center"><b>{{x.name}} => {{x.powerDraw}} W</b></p>
                     <p></p>
                     <label class="switch">

@@ -250,5 +250,31 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
             console.log(response);
         });
     }
+
+    $scope.deleteStrip = function(x){
+        $scope.deleteSmartStrip(x.id);
+    }
+
+    $scope.deleteSmartStrip = function(id) {
+        var method = "POST";
+        var url = "http://localhost:1880/deleteSmartStrip";
+        var data={"ownerID":usernameStorage.getID(),"id":id};
+        $http({
+            method : method,
+            url : url,
+            data : data,
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        }).then( $scope._successDeleteSmartStrip, $scope._errorDeleteSmartStrip);
+    }
+
+    $scope._successDeleteSmartStrip = function(response) {
+        $scope.getSmartStripsByUserID();
+    }
+
+    $scope._errorDeleteSmartStrip = function(response) {
+        console.log(response);
+    }
 });
 
