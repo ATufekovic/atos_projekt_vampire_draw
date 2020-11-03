@@ -16,6 +16,9 @@ app.config(function ($routeProvider) {
         .when("/gui", {
             templateUrl : "views/gui.html",
             controller : "guiCtrl"
+        })
+        .when("/about", {
+            templateUrl: "views/about.html"
         });
     
 });

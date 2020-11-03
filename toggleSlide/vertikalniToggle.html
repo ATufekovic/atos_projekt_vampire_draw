@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 48px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d64161;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 2.5px;
+  bottom: 2px;
+  background-color:wheat;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color:#405d27;
+}
+
+input:focus + .slider {
+  box-shadow: green;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateY(-26px);
+  -ms-transform: translateY(-26px);
+  transform: translateY(-26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+</head>
+
+<body>
+<h2>Vertikalni</h2>
+
+<label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label>
+
+<label class="switch">
+  <input type="checkbox" checked>
+  <span class="slider round"></span>
+</label>
+
+
+</body>
+</html> 
+

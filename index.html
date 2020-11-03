@@ -9,16 +9,27 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <style>
+        .logo-image{
+        width: 150px;
+        height: 80px;
+    }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar d-flex bg-secondary align-content-center">
+    <nav class="navbar d-flex bg-secondary align-content-center bg-danger">
         <div class="p-1 mr-auto">
-            <h3 class="text-white">Powerstrip app</h3>
+            <div class="logo-image">
+                  <img src="./images/logo.png" class="img-fluid">
+            </div>
         </div>
         <div class="p-1">
-            <p class="text-white">//TODO: logout</p>
             <a class="text-white" href="#!login">Login</a>
+            <a class="text-light" href="#!register">Register</a>
+            <a class="text-light" href="#!about">About</a>
+            <a class="text-light" href="#!gui">Home</a>
         </div>
     </nav>
 
