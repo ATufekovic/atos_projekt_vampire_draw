@@ -39,7 +39,7 @@
                         <span class="slider round"></span>
                     </label>
                     <div class="d-flex flex-wrap bg-light">
-                        <div class="flex-grow p-2 border" ng-repeat="y in x.plugs" ng-class="{'bg-secondary' : !y.state, 'bg-success' : y.state}">
+                        <div class="flex-grow p-2 border" ng-repeat="y in x.plugs" ng-class="{'bg-danger' : (y.powerDraw > 0.1 && y.powerDraw < 2),'bg-secondary' : !y.state, 'bg-success' : y.state}">
                             <img src="plug.svg" height="50" witdh="50">
                             <p class="text-center"><b>{{y.powerDraw}} W</b></p>
                             <label class="switch">
