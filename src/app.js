@@ -1,4 +1,4 @@
-var app = angular.module("smartStripApp", ['ngRoute']);
+var app = angular.module("powerstripApp", ['ngRoute']);
 app.config(function ($routeProvider) {
     $routeProvider
         .when("/", {
@@ -7,6 +7,10 @@ app.config(function ($routeProvider) {
         })
         .when("/login", {
             templateUrl: "views/login.html",
+            controller : "loginCtrl"
+        })
+        .when("/about", {
+            templateUrl: "views/about.html",
             controller : "loginCtrl"
         })
         .when("/register", {

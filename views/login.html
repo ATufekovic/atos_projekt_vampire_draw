@@ -2,11 +2,11 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <div class="card">
-                <div class="card-header">
+            <div class="card bg-light">
+                <div class="card-header text-danger">
                     <h3>Login</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body bg-light">
                     <form name="myForm" ng-keypress="($event.charCode==13)? login() : return">
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -25,11 +25,11 @@
                             <span ng-show="badLogin">Failed login due to wrong user credentials.</span>
                             </span>
                         </div>
-                        <button type="button" class="btn btn-primary" ng-click="login()" ng-disabled="myForm.username.$invalid
+                        <button type="button" class="btn btn-primary bg-danger" ng-click="login()" ng-disabled="myForm.username.$invalid
                          || myForm.password.$invalid">Login</button>
                     </form>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-danger bg-light">
                     Not a user? <a href="#!register">Register here</a>
                 </div>
             </div>

@@ -2,12 +2,12 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-            <div class="card">
-                <div class="card-header">
+            <div class="card bg-light">
+                <div class="card-header text-danger">
                     <h3>Register</h3>
                 </div>
-                <div class="card-body">
-                    <form form name="myForm" ng-keypress="($event.charCode==13)? register() : return">
+                <div class="card-body bg-light">
+                    <form form name="myForm" ng-keypress="($event.charCode==13)? register() : return"">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -37,25 +37,32 @@
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <label></label><p></p>
-                                <button type="button" class="btn btn-primary" ng-click="register()" ng-disabled="myForm.username.$invalid || 
-                                myForm.password.$invalid || error || usernameWrongInput || passwordWrongInput">Register</button>
+                                <div class="form-group">
+                                    <label for="">E-mail:</label>
+                                    <input type="email" class="form-control" name="email" value="" ng-model="email" required>
+                                    <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+                                    <span ng-show="myForm.email.$error.required">Email is required.</span>
+                                    </span>
+                                    <span style="color:red" ng-show="myForm.email.$dirty && emailWrongInput">
+                                    <span ng-show="emailWrongInput">Email is invalid</span>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <div class="form-group">
                                     <label for="password">Confirm password:</label>
                                     <input type="password" class="form-control" name="passwordConfirm" value="" ng-model="passwordConfirm">
                                     <span style="color:red" ng-show="error">
                                     <span ng-show="error">Passwords must match</span>
                                     </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-primary bg-danger" ng-click="register()" ng-disabled="myForm.username.$invalid ||
+                        myForm.email.$invalid || myForm.password.$invalid || error || usernameWrongInput || passwordWrongInput || emailWrongInput">Register</button>
                     </form>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer text-danger bg-light">
                     Already have an account? <a href="#!login">Sign in here</a>
                 </div>
             </div>

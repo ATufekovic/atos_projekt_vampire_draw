@@ -9,42 +9,60 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
 </head>
+<style>
+    .logo-image{
+    width: 150px;
+    height: 80px;
+}
+</style>
 
 <body>
-    <nav class="navbar d-flex bg-secondary align-content-center">
-        <div class="p-1 mr-auto">
+    <nav class="navbar d-flex bg-danger align-content-center">
+        <a class="navbar-brand" href="/">
+            <div class="logo-image">
+                  <img src="/images/logo.png" class="img-fluid">
+            </div>
+      </a>
+     <!--    <div class="p-1 mr-auto"></div>
             <h3 class="text-white">Powerstrip app</h3>
-        </div>
+        </div> -->
+        
         <div class="p-1">
-            <p class="text-white">//TODO: logout</p>
+            <p class="text-light">//TODO: logout</p>
             <a class="text-white" href="#!login">Login</a>
+            <a class="text-light" href="#!register">Register</a>
+            <a class="text-light" href="#!about">About</a>
+            <a class="text-light" href="#!gui">Home</a>
         </div>
     </nav>
 
-    <div ng-app="smartStripApp">
+    <div ng-app="powerstripApp">
         <div ng-view></div>
     </div>
+
+    <script type="text/javascript" src="./lib/stomp.js"></script>
 
     <script type="text/javascript" src="./src/app.js"></script>
 
     <script type="text/javascript" src="./services/usernameStorageService.js"></script>
-    <script type="text/javascript" src="./services/smartStripStorageService.js"></script>
 
     <script type="text/javascript" src="./controllers/loginController.js"></script>
     <script type="text/javascript" src="./controllers/registerController.js"></script>
     <script type="text/javascript" src="./controllers/guiController.js"></script>
 
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>
