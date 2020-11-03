@@ -1,6 +1,6 @@
 <div class="container-fluid" ng-init="init()">
     <div class="row">
-        <div class="col-sm-4 container p-3 bg-light text-white">
+        <div class="col-lg-3 container p-3 bg-light text-white">
             <div class="float-right"><img data-toggle="dropdown" src="addStrip.svg" height="100" witdh="100"
                     class="img-rounded center">
                 <div class="dropdown-menu">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="col-sm-4 container p-3 bg-light">
+        <div class="col-lg-6 container p-3 bg-light">
             <div class="d-flex flex-wrap flex-row bg-light align-content-around">
                 <p>Total power draw: {{totalPowerDraw}} W</p>
                 <div class="p-4 border container-fluid" ng-repeat="x in smartStrips" ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div class="col-sm-4 container p-3 bg-light text-white">
+        <div class="col-lg-3 container p-3 bg-light text-white">
         </div>
 
     </div>

@@ -252,7 +252,12 @@ angular.module("smartStripApp").controller("guiCtrl", function ($scope, username
     }
 
     $scope.deleteStrip = function(x){
-        $scope.deleteSmartStrip(x.id);
+        var deleteFlag = confirm("Are you sure you want to delete this smart strip? (" + x.name + ")");
+        if(deleteFlag){
+            $scope.deleteSmartStrip(x.id);
+        } else {
+            //if needed add logic here
+        }
     }
 
     $scope.deleteSmartStrip = function(id) {
