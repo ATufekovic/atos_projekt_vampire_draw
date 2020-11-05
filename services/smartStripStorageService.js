@@ -1,6 +1,6 @@
 angular.module("smartStripApp").service("smartStripStorage", function(){
     this.smartStrips = [];
-    this.consumption = 0;
+    this.totalPowerDraw = 0;
 
     this.getSmartStrips = function() {
         //console.log(this.smartStrips);
@@ -15,15 +15,14 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         return smartStrip.plugs;
     }
 
-    this.setPlugs = function(smartStrip,plugs){
+    this.setPlugs = function(smartStrip,plugs){//java works with references so this works
         //console.log(smartStrip);
         smartStrip.plugs = JSON.parse(JSON.stringify(plugs));
         return;
     }
-
-    this.setConsumption = function (smartStrip,consumption){
-        smartStrip.consumption = consumption;
-        return;
+    
+    this.getTotalPowerDraw = function(){
+        return this.totalPowerDraw;
     }
 
     this.changeStripMasterState = function(smartStrip){
@@ -44,18 +43,42 @@ angular.module("smartStripApp").service("smartStripStorage", function(){
         }
     }
 
-    this.smartstripConsumption = function(){
-        for(var i=0;i<this.smartStrips.length;i++){
-            this.smartStrips[i].consumption=0;
-            if(this.smartStrips[i].masterState==1){
-                for(var j=0;j<this.smartStrips[i].plugs.length;j++){
-                    if(this.smartStrips[i].plugs[j].state==1){
-                        this.smartStrips[i].consumption+=this.smartStrips[i].plugs[j].powerDraw;
-                    }
-                }   
-            }
-        }
+    this.calculatePowerDraw = function(){
+        this.totalPowerDraw = 0;
+        this.smartStrips.forEach(strip => {
+            var totalDraw = 0;
+            strip.plugs.forEach(plug => {
+                totalDraw += plug.powerDraw;
+                this.totalPowerDraw += plug.powerDraw;
+            });
+            strip.powerDraw = totalDraw;
+        });
+    }    
+
+    this.refreshSmartStrips = function(newSmartStrips){
+        //similiar to other functions but wont change structure
+        this.smartStrips.forEach(currentStrip => {
+            newSmartStrips.forEach(newStrip => {
+                if(currentStrip.id == newStrip.id){
+                    //for strips only masterState matters
+                    currentStrip.masterState = newStrip.masterState;
+                }
+            });
+        });
     }
 
-    
+    this.refreshPlugs = function(newPlugs){
+        this.smartStrips.forEach(currentStrip => {
+            if(currentStrip.id == newPlugs[0].owner){//if the strip matches with the plug owner, it is that strip for all plugs
+                currentStrip.plugs.forEach(currentPlug => {
+                    newPlugs.forEach(newPlug => {
+                        if(currentPlug.id == newPlug.id){
+                            currentPlug.powerDraw = newPlug.powerDraw;
+                            currentPlug.state = newPlug.state;
+                        }
+                    })
+                })
+            }
+        })
+    }
 });
