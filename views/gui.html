@@ -1,121 +1,129 @@
-<body>
-  <div class="container-fluid">
-      <div class="row">
-
-          <div class="col-sm-4 container p-3 bg-light text-white">
-            <div class="float-right"><img data-toggle="dropdown" src="addStrip.svg" height="100" witdh="100" class="img-rounded center">
-              <div class="dropdown-menu">
-                <form form name="myForm" ng-keypress="($event.charCode==13)? register() : return">
-                <div class="form-group">
-                  <label for="powerstripName">Enter powerstrip name:</label>
-                  <input type="text" class="form-control" id="usr" name="stripName" ng-model="stripName" required>
-                </div>
-                <div class="form-group">
-                  <label for="numberOfPlugs">Enter number of plugs:</label>
-                  <input type="password" class="form-control" id="pwd" name="stripNumber" ng-model="stripNumber">
-                </div>
-                <div class="form-group">
-                  <button type="button" class="btn btn-secondary" ng-click="addSmartStrip()" ng-disabled="myForm.stripName.$invalid || stripNameWrongInput || stripNumberWrongInput">Submit</button>
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-4 container p-3 bg-light">
-              <div class="d-flex flex-wrap flex-row bg-light align-content-around">
-                  <div class="p-4 border container-fluid {{x.color}}" ng-repeat="x in powerstrips" id="{{x.id}}-"><img src="powerstrip.svg" height="50" witdh="50" class="img-rounded">
-                    <button type="button" class="btn close btn-lg" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p class="text-center"><b>{{x.name}}</b></p>
-                    <p></p>
-                      <label ng-click="togglePowerstrip(x)"class="switch">
-                          <input type="checkbox" ng-model="x.state">
-                          <span class="slider round"></span>
-                      </label>
-                      <div class="d-flex flex-wrap bg-light">
-                        <div class="flex-grow p-2 border {{y.color}}" ng-repeat="y in x.plugs" id="{{x.id}}-{{y.id}}"><img src="plug.svg" height="50" witdh="50" class="img-rounded">
-                          <p class="text-center"><b>{{y.powerDraw}} W</b></p> 
-                          <label ng-click="togglePlug(x,y)" class="switch">
-                              <input type="checkbox" ng-model="y.state" ng-disabled="!x.state">
-                              <span class="slider round"></span>
-                          </label>
+<div class="container-fluid" ng-init="init()">
+    <div class="row">
+        <div class="col-lg-3 container p-3 bg-light text-white">
+            <div class="float-right"><img data-toggle="dropdown" src="addStrip.svg" height="100" witdh="100"
+                    class="img-rounded center">
+                <div class="dropdown-menu">
+                    <form form name="myForm" ng-keypress="($event.charCode==13)? register() : return">
+                        <div class="form-group">
+                            <label for="smartStripName">Enter smartStrip name:</label>
+                            <input type="text" class="form-control" id="usr" name="stripName" ng-model="stripName"
+                                required>
                         </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+                        <div class="form-group">
+                            <label for="numberOfPlugs">Enter number of plugs:</label>
+                            <input type="number" class="form-control" id="pwd" name="stripNumber"
+                                ng-model="stripNumber">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" ng-click="addStrip()"
+                                ng-disabled="myForm.stripName.$invalid || stripNameWrongInput || stripNumberWrongInput">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-          <div class="col-sm-4 container p-3 bg-light text-white">
-          </div>
+        <div class="col-lg-6 container p-3 bg-light">
+            <div class="d-flex flex-wrap flex-row bg-light align-content-around">
+                <p>Total power draw: {{totalPowerDraw}} W</p>
+                <div class="p-4 border container-fluid" ng-repeat="x in smartStrips"
+                    ng-class="{'bg-secondary' : !x.masterState, 'bg-success' : x.masterState}">
+                    <img src="smartStrip.svg" height="50" witdh="50">
+                    <button type="button" class="close btn-lg" ng-click="deleteStrip(x)" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p class="text-center"><b>{{x.name}} => {{x.powerDraw}} W</b></p>
+                    <p></p>
+                    <label class="switch">
+                        <input type="checkbox" ng-model="x.masterState" ng-true-value="1" ng-false-value="0"
+                            ng-click="toggleSmartStrip(x)">
+                        <span class="slider round"></span>
+                    </label>
+                    <div class="d-flex flex-wrap bg-light">
+                        <div class="flex-grow p-2 border" ng-repeat="y in x.plugs"
+                            ng-class="{'bg-danger' : (y.powerDraw > 0.1 && y.powerDraw < 2),'bg-secondary' : !y.state, 'bg-success' : y.state}">
+                            <img src="plug.svg" height="50" witdh="50">
+                            <p class="text-center"><b>{{y.powerDraw}} W</b></p>
+                            <label class="switch">
+                                <input type="checkbox" ng-model="y.state" ng-disabled="!x.masterState" ng-true-value="1"
+                                    ng-false-value="0" ng-click="togglePlug(x,y)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      </div>
-  </div>
-</body>
+        <div class="col-lg-3 container p-3 bg-light text-white">
+        </div>
+
+    </div>
+</div>
 
 <style>
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 48px;
-    height: 20px;
-  }
-  
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #d64161;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 15px;
-    width: 15px;
-    left: 4px;
-    bottom: 2px;
-    background-color:wheat;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color:#405d27;
-  }
-  
-  input:focus + .slider {
-    box-shadow: green;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 20px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
-  
-  .flex-grow {
-    flex: 1 0 auto;
-}
-  </style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d64161;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 2px;
+        background-color: wheat;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #405d27;
+    }
+
+    input:focus+.slider {
+        box-shadow: green;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 20px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .flex-grow {
+        flex: 1 0 auto;
+    }
+</style>
