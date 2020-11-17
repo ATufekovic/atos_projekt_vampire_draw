@@ -1,4 +1,4 @@
-angular.module("smartStripApp").controller("registerCtrl", function ($scope, $http, usernameStorage, smartStripStorage) {
+angular.module("smartStripApp").controller("registerCtrl", function ($scope, $http, usernameStorage, smartStripStorage, $location) {
     $scope.$watch('username', function () { $scope.test(); });
     $scope.$watch('password', function () { $scope.test(); });
     $scope.$watch('passwordConfirm', function () { $scope.test(); });
@@ -30,9 +30,12 @@ angular.module("smartStripApp").controller("registerCtrl", function ($scope, $ht
 
     function _success(response) {
         clearFormData();
+        alert("User successfully added");
+        $location.path("login");
     }
 
     function _error(response) {
+        alert(response.data);
         console.log(response.statusText);
     }
 

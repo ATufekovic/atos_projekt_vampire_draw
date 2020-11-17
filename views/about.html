@@ -40,10 +40,40 @@ crossorigin="anonymous"></script>
 .carousel-item{
     margin: 0 auto;
   }
+  
+  .fontIcon {
+        height: 50px;
+        width: 50px;
+        background-color: crimson;
+        border-radius: 15px;
+    }
+
+    .fontIconB {
+        height: 50px;
+        width: 50px;
+        background-color: crimson;
+        border-radius: 15px;
+    }
+
+    .carousel-control-next {
+        padding: -200px;
+        height: 45px;
+        position: right;
+        width: fit-content;
+        margin: auto;
+    }
+
+    .carousel-control-prev {
+        padding-left: -20px;
+        height: 45px;
+        position: left;
+        width: fit-content;
+        margin: auto;
+    }
 </style>
 
 
-<body>
+<body target="_self">
   <!-- Page Content -->
   <div class="container page-top">
 
@@ -79,13 +109,13 @@ crossorigin="anonymous"></script>
 
           </div>
 
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" target="_self">
+              <span class="carousel-control-prev-icon fontIconB" aria-hidden="true"></span>
               <span class="sr-only">Previous</span>
           </a>
 
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" target="_self">
+              <span class="carousel-control-next-icon fontIcon" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
           </a>
       </div>
